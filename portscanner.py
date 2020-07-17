@@ -3,18 +3,14 @@ import subprocess
 import sys
 from datetime import datetime
 
-subprocess.call('clear', shell=True)
-
-
 def clear():
     subprocess.call('clear', shell=True)
-
+    
+    
 clear()
-
 
 remoteServer = input("Remote host: ")
 remoteServerIp = socket.gethostbyname(remoteServer)
-
 
 start_time = datetime.now()
 
@@ -25,7 +21,6 @@ try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(5)
 
-        
         clear() #So text does not fill whole screen
         print("Remote host: {} - {}".format(remoteServer, remoteServerIp))
         print("\n- Scanning: Port {}\n\n|--------------------|".format(port))
@@ -40,7 +35,8 @@ try:
             sock.close()
 
 except KeyboardInterrupt:
-    print("Exiting.")
+    print("Stopped Scanning.")
+    input("\nPress Enter to exit.")
     sys.exit()
 
 except socket.gaierror:
@@ -52,7 +48,6 @@ except socket.error:
     sys.exit()
 
 end_time= datetime.now()
-
 scan_duration = start_time - end_time
 
 print("Scanning completed in {}".format(scan_duration))
