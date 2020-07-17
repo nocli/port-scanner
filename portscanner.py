@@ -16,6 +16,8 @@ start_time = datetime.now()
 
 open_ports = []
 
+stop = False
+
 try:
     for port in range(79, 1025):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,10 +25,18 @@ try:
 
         clear() #So text does not fill whole screen
         print("Remote host: {} - {}".format(remoteServer, remoteServerIp))
-        print("\n- Scanning: Port {}\n\n|--------------------|".format(port))
+        if not stop:
+            print("\n- Scanning: Port {}\n".format(port))
+            print("|--------------------|")
+        else:
+            print("\n- Stopped scanning. Reached port {}\n".format(port))
+            print("|--------------------|")
+            input("\nPress Enter to exit.")
+            sys.exit()
         for open_port in open_ports:
             print("|Port {}: open".format(open_port))
-        
+
+  
 
         if not sock.connect_ex((remoteServerIp, port)):
             open_ports.append(port)
@@ -35,9 +45,7 @@ try:
             sock.close()
 
 except KeyboardInterrupt:
-    print("Stopped Scanning.")
-    input("\nPress Enter to exit.")
-    sys.exit()
+    stop = True
 
 except socket.gaierror:
     print("Hostname could not be found")
